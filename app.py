@@ -48,7 +48,7 @@ st.markdown("""
 
 .nav-link {
     color: #000000 !important; /* Pure Black */
-    text-decoration: none;
+    text-decoration: none !important;
     font-weight: 500;
     font-size: 0.95rem;
     transition: color 0.2s;
@@ -121,6 +121,8 @@ st.markdown("""
     color: #16a34a !important;
     margin-bottom: 1rem !important;
     display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 /* Text styling ("Drag and drop file here") */
@@ -234,10 +236,10 @@ st.markdown("""
 <!-- Navigation -->
 <div class="nav-container">
 <div style="display: flex; align-items: center; gap: 0.75rem;">
-<div style="background-color: #16a34a; padding: 0.5rem; border-radius: 0.75rem; color: white; box-shadow: 0 4px 6px -1px rgba(22, 197, 94, 0.3);">
+<div style="background-color: #16a34a; padding: 0.5rem; border-radius: 0.75rem; color: white; box-shadow: 0 4px 6px -1px rgba(22, 197, 94, 0.3); display: flex; align-items: center; justify-content: center;">
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
 </div>
-<span style="font-size: 1.5rem; font-weight: 700; color: #0f172a; tracking-tight: -0.025em;">Flora<span style="color: #16a34a;">Guard</span></span>
+<span style="font-size: 1.5rem; font-weight: 700; color: #0f172a; tracking-tight: -0.025em; line-height: 1;">Flora<span style="color: #16a34a;">Guard</span></span>
 </div>
 
 <div class="nav-links-group">
