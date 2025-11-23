@@ -3,12 +3,16 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 import json
+import requests
+import os
 
 # Set page config
 st.set_page_config(page_title="Plant Disease Classifier", layout="centered")
 
 st.title("🌿 Plant Disease Classifier")
 st.markdown("Upload an image of a plant leaf to detect diseases.")
+
+HF_MODEL_URL = "https://huggingface.co/somtomxr/FloraGuard/resolve/main/plant_disease_model.h5"
 
 # Load model and class indices
 @st.cache_resource
