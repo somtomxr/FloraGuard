@@ -157,8 +157,7 @@ st.markdown("""
     padding: 0.75rem 2rem;
     font-weight: 600;
     transition: background-color 0.3s;
-    margin-top: 2.5rem !important;
-    margin-bottom: 1.5rem !important;
+    margin-top: 1rem !important;
     display: block !important;
     margin-left: auto !important;
     margin-right: auto !important;
