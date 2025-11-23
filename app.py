@@ -26,44 +26,28 @@ st.markdown("""
     color: #1e293b;
 }
 
-/* 1. TOP MARGIN FIX: Increase top padding for the whole block */
+/* TOP MARGIN FIX */
 .block-container {
-    padding-top: 6rem !important; /* Increased to prevent overlap with fixed navbar */
+    padding-top: 5rem !important; 
     padding-bottom: 2rem !important;
-}
-
-/* Hide Streamlit Header */
-header[data-testid="stHeader"] {
-    display: none;
 }
 
 /* Navbar Styling */
 .nav-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999999;
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 1rem 2rem;
-    margin-bottom: 0;
+    margin-bottom: 2rem;
 }
 
 .nav-links-group {
     display: flex; 
     align-items: center; 
     gap: 2rem;
-    padding-top: 15px;
 }
 
 .nav-link {
-    color: black !important;
+    color: #000000 !important; /* Pure Black */
     text-decoration: none;
     font-weight: 500;
     font-size: 0.95rem;
@@ -74,6 +58,7 @@ header[data-testid="stHeader"] {
     color: #16a34a !important;
     text-decoration: none;
 }
+
 .nav-btn {
     background-color: #0f172a;
     color: white !important;
@@ -97,7 +82,6 @@ header[data-testid="stHeader"] {
     display: none;
 }
 
-/* 2. FORCE VERTICAL STACKING (2nd Image Style) */
 /* Target the main dropzone container */
 [data-testid='stFileUploader'] section {
     background-color: white;
@@ -107,14 +91,14 @@ header[data-testid="stHeader"] {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
     transition: border-color 0.3s, box-shadow 0.3s;
     
-    /* CRITICAL: Force Flex Column */
+    /* Force Flex Column for vertical stacking */
     display: flex;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
-/* Target internal Streamlit containers to ensure they don't override our column layout */
+/* Target internal Streamlit containers */
 [data-testid='stFileUploader'] section > div {
     display: flex;
     flex-direction: column !important;
@@ -135,7 +119,7 @@ header[data-testid="stHeader"] {
     height: 50px !important;
     fill: #16a34a !important;
     color: #16a34a !important;
-    margin-bottom: 1rem !important; /* Push text down */
+    margin-bottom: 1rem !important;
     display: block !important;
 }
 
@@ -153,7 +137,7 @@ header[data-testid="stHeader"] {
     color: #94a3b8;
     font-size: 0.85rem;
     text-align: center;
-    margin-bottom: 1.5rem !important; /* Push button down */
+    margin-bottom: 1.5rem !important;
     display: block;
 }
 
@@ -186,7 +170,7 @@ header[data-testid="stHeader"] {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Custom Diagnose Button */
+/* Custom Predict Button */
 div.stButton > button {
     background-color: #16a34a;
     color: white;
@@ -208,7 +192,8 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-# --- BACKEND LOGIC (Unchanged) ---
+
+# --- BACKEND LOGIC START (From app2.py) ---
 
 HF_MODEL_URL = "https://huggingface.co/somtomxr/FloraGuard/resolve/main/plant_disease_model.h5"
 LOCAL_PATH = "plant_disease_model.h5"
@@ -228,21 +213,23 @@ def load_model():
 
 @st.cache_data
 def load_class_indices():
-    if not os.path.exists('class_indices.json'):
-         return {} 
     with open('class_indices.json', 'r') as f:
         class_indices = json.load(f)
+    # Ensure keys are integers
     return {int(k): v for k, v in class_indices.items()}
 
 try:
     model = load_model()
     class_names = load_class_indices()
+    # st.success("Model loaded successfully!") # Commented out to prevent UI clutter
 except Exception as e:
     st.error(f"Error loading model: {e}")
     st.stop()
 
+# --- BACKEND LOGIC END ---
 
-# --- HEADER SECTION (HTML) ---
+
+# --- UI HEADER SECTION (HTML) ---
 st.markdown("""
 <!-- Navigation -->
 <div class="nav-container">
@@ -279,21 +266,22 @@ Upload a photo of your plant's leaf. Our advanced AI will identify diseases.
 
 # --- MAIN INTERACTION AREA ---
 
-# File Uploader
-uploaded_file = st.file_uploader("Drop your image here", type=["jpg", "jpeg", "png"])
+# File uploader (Styled by CSS above)
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    # Use columns to center the image preview
+    # Centered Image Preview
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         image = Image.open(uploaded_file)
-        st.image(image, caption='Preview', use_column_width=True)
+        st.image(image, caption='Uploaded Image', use_column_width=True)
     
     # Add a spacer
     st.markdown("<br>", unsafe_allow_html=True)
     
-    if st.button('Diagnose Plant'):
-        with st.spinner('Analyzing leaf patterns...'):
+    if st.button('Predict'):
+        with st.spinner('Analyzing...'):
+            # --- LOGIC START (Prediction) ---
             # Preprocess the image
             img = image.resize((224, 224))
             img_array = np.array(img)
@@ -304,12 +292,13 @@ if uploaded_file is not None:
             predictions = model.predict(img_array)
             predicted_class_index = np.argmax(predictions)
             confidence = np.max(predictions)
-            predicted_class_name = class_names.get(predicted_class_index, "Unknown Disease").replace("_", " ")
+            predicted_class_name = class_names[predicted_class_index].replace('_', ' ')
+            # --- LOGIC END ---
 
             # Calculate confidence percentage for the bar
             confidence_percent = int(confidence * 100)
             
-            # Determine color based on health
+            # Determine color based on health (simple logic)
             is_healthy = "healthy" in predicted_class_name.lower()
             color_theme = "green" if is_healthy else "orange" if confidence_percent < 80 else "red"
             
