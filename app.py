@@ -77,6 +77,11 @@ st.markdown("""
 }
 
 /* --- CUSTOM FILE UPLOADER STYLING --- */
+/* Add margin to push it down from the hero text */
+[data-testid='stFileUploader'] {
+    margin-top: 3rem !important;
+}
+
 /* Hide the default label */
 [data-testid='stFileUploader'] label {
     display: none;
@@ -156,6 +161,9 @@ st.markdown("""
     display: block !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    position: relative !important;
+    z-index: 999 !important;
+    cursor: pointer !important;
 }
 [data-testid='stFileUploader'] button:hover {
     background-color: #15803d;
@@ -350,7 +358,7 @@ Recommendation
 
 # Footer
 st.markdown("""
-<div style="text-align: center; color: #94a3b8; font-size: 0.875rem; margin-top: 3rem;">
+<div style="text-align: center; color: #94a3b8; font-size: 0.875rem; margin-top: 5rem; padding-bottom: 3rem;">
 &copy; 2025 FloraGuard AI. Powered by TensorFlow.
 </div>
 """, unsafe_allow_html=True)
