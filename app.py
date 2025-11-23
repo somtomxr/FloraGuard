@@ -289,7 +289,12 @@ if uploaded_file is not None:
     # Add a spacer
     st.markdown("<br>", unsafe_allow_html=True)
     
-    if st.button('Predict'):
+    # Centered Predict Button
+    col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+    with col_btn2:
+        predict_btn = st.button('Predict')
+
+    if predict_btn:
         with st.spinner('Analyzing...'):
             # --- LOGIC START (Prediction) ---
             # Preprocess the image
@@ -327,10 +332,10 @@ if uploaded_file is not None:
 <div style="background-color: #f8fafc; border-radius: 1rem; padding: 1rem; border: 1px solid #e2e8f0; min-width: 180px;">
 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.5rem;">
 <span style="color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Confidence</span>
-<span style="font-size: 1.5rem; font-weight: 800; color: {color_theme};">{confidence_percent}%</span>
+<span style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(90deg, #2ECC71, #27AE60); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;">{confidence_percent}%</span>
 </div>
 <div style="width: 100%; height: 8px; background-color: #e2e8f0; border-radius: 9999px; overflow: hidden;">
-<div style="width: {confidence_percent}%; height: 100%; background-color: {color_theme}; border-radius: 9999px;"></div>
+<div style="width: {confidence_percent}%; height: 100%; background: linear-gradient(90deg, #2ECC71, #27AE60); border-radius: 9999px;"></div>
 </div>
 </div>
 </div>
