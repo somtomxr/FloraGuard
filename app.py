@@ -17,7 +17,7 @@ HF_MODEL_URL = "https://huggingface.co/somtomxr/FloraGuard/resolve/main/plant_di
 # Load model and class indices
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model('plant_disease_model.h5')
+    model = tf.keras.models.load_model(HF_MODEL_URL)
     return model
 
 @st.cache_data
